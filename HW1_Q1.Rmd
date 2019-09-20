@@ -1,0 +1,65 @@
+---
+title: "HW1_Q1"
+output: html_document
+
+---
+Question 1:
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+samp = tibble(
+  norm_samp = rnorm(8),
+  vec_logical1 = norm_samp > 0,
+  vec_char1 =c("I","like","eating","dark","chocolate","and","chocolate","cake"),
+  vec_factor1 = factor(c("Person","Things","Things","Food","Food","Food","Food","Food"))
+)
+```
+
+```{r,Eval = FALSE}
+logical_cal1 = as.numeric(pull(samp, vec_logical1)) * pull(samp,norm_samp)
+logical_cal2= as.factor(pull(samp, vec_logical1))*pull(samp,norm_samp)
+factor_cal1 = as.numeric(as.factor(pull(samp, vec_logical1)))*pull(samp,norm_samp)
+
+logical_cal1
+logical_cal2
+factor_cal1
+```
+When converting the logical vector to a factor, and multiply the random smaple by the result, the calculation returns 8 NAs. Scince factors cannot be converted to numberic values, it is meaningless to do such calculation and that's Rstudio returns NAs. Similarly, it is meaningless to take the mean of factors since factors are not numeric values. Factos are divided to three categories: person, things and food.
+
+Problem 2:
+```{r}
+plot_df = tibble (
+  x = rnorm(500),
+  y = rnorm(500),
+  vec_logical2 = x + y > 1,
+  vec_numeric2 = as.numeric(vec_logical2),
+  vec_factor2 = as.factor(vec_logical2)
+)
+
+```
+
+The mean of the sample is `r mean(pull(plot_df,x))`
+The median of the sample is `r median(pull(plot_df,x))`
+The number of rows is `r nrow(plot_df)` and the number of column is `r ncol(plot_df)`
+
+scatterplot of x and y:
+The first plot: Use logical variable
+```{r}
+ggplot(plot_df, aes(x = x, y = y,color = vec_logical2)) + geom_point()
+ggsave("scatter_logical.pdf", height = 4, width = 6)
+```
+The second plot: Use numeric variable
+```{r}
+ggplot(plot_df, aes(x = x, y = y,color = vec_numeric2)) + geom_point()
+ggsave("scatter_num.pdf", height = 4, width = 6)
+```
+The third plot: Use factor variable
+```{r}
+ggplot(plot_df, aes(x = x, y = y,color = vec_factor2)) + geom_point()
+ggsave("scatter_factor.pdf", height = 4, width = 6)
+```
+
+
